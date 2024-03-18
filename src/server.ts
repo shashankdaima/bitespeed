@@ -1,31 +1,8 @@
-import express from 'express';
-import { PrismaClient } from '@prisma/client';
-const app = express();
+import app  from './app'; // app.ts
+import { config } from './config'; // config.ts
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+const server = app.listen(config.port, () => {
+  console.log(`Server started at http://localhost:${config.port}`);
 });
 
-app.listen(3000, () => {
-    console.log('App listening on port 3000!');
-});
-// const prisma = new PrismaClient();
-
-
-// async function main() {
-//   const newUser = await prisma.user.create({
-//     data: {
-//       name: 'Alice',
-//       email: 'alice@prisma.io',
-//     },
-//   })
-//   console.log(newUser)
-// }
-
-// main()
-//   .catch((e) => {
-//     throw e
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect()
-//   })
+export { server };
