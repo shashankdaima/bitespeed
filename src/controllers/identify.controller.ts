@@ -1,5 +1,8 @@
 import { RequestHandler } from "express";
 import { z } from "zod";
+import { IdentityService } from "../services/identity.service";
+import { IdentityServiceImpl } from "../services/identity.service.impl";
+import { Success } from "../utils/result.util";
 
 const userSchema = z.object({
     email: z.string().email(),
@@ -10,11 +13,18 @@ export const identifyUser: RequestHandler = async (req, res, next) => {
     try {
         const parsingResult = userSchema.safeParse(req.body);
         if (parsingResult.success) {
-            res.json({
-                message: `User Identified successfully ${parsingResult.data.email}`
-            });
+            const service:IdentityService=new IdentityServiceImpl();
+            const serviceResponse= await service.identifyUser(parsingResult.data.email, parsingResult.data.phoneNumber);
+            if(serviceResponse instanceof Success){
+                res.json({
+                    message: `User Identified successfully ${parsingResult.data.email}`
+                });
+            }else{
+                throw Error(serviceResponse.error);
+            }
+
         } else {
-            throw new Error("Invalid User Data");
+            res.status(400).json({message: "Invalid User Data"});
         }
 
     } catch (err) {
