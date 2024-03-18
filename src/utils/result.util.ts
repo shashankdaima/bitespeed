@@ -8,9 +8,9 @@ class Success<T> extends Result<T> {
     }
 }
 
-class MyError<T> extends Result<T> {
+class Exception<T> extends Result<T> {
     constructor(public error: any) {
         super(null, error);
     }
 }
-export {Result, Success, MyError};
+export {Result, Success, Exception };

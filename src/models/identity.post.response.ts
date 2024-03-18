@@ -1,4 +1,4 @@
-interface IndentityResponse {
+export interface IdentityResponse {
     contact: {
         primaryContatctId: number;
         emails: string[];
