@@ -16,9 +16,7 @@ export const identifyUser: RequestHandler = async (req, res, next) => {
             const service:IdentityService=new IdentityServiceImpl();
             const serviceResponse= await service.identifyUser(parsingResult.data.email, parsingResult.data.phoneNumber);
             if(serviceResponse instanceof Success){
-                res.json({
-                    message: `User Identified successfully ${parsingResult.data.email}`
-                });
+                res.json(serviceResponse.data);
             }else{
                 throw Error(serviceResponse.error);
             }
