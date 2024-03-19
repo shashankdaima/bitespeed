@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,20 +8,24 @@ datasource db {
 }
 
 model Contact {
-  id             Int            @id @default(autoincrement())
-  phoneNumber    String?
-  email          String?
-  linkedId       Int?           @unique
-  linkPrecedence LinkPrecedence @default(primary)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  deletedAt      DateTime?
+  id               Int              @id @default(autoincrement())
+  phoneNumber      String?          @unique
+  email            String?          @unique
+  contactClusterId Int?
+  contactCluster   ContactCluster?  @relation("MemberContacts",fields: [contactClusterId], references: [id])
+  linkPrecedence   LinkPrecedence
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  clustersCreated  ContactCluster[] @relation("ClusterCreator")
+}
 
-  linkedContacts Contact[] @relation("ContactLink")
-  link           Contact?  @relation("ContactLink", fields: [linkedId], references: [id])
-
-  @@unique([phoneNumber, email])
-  @@map("Contacts")
+model ContactCluster {
+  id          Int       @id @default(autoincrement())
+  members     Contact[] @relation("MemberContacts")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  creatorId   Int
+  creator     Contact   @relation("ClusterCreator", fields: [creatorId], references: [id])
 }
 
 enum LinkPrecedence {
