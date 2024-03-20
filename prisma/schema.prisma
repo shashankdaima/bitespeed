@@ -12,20 +12,20 @@ model Contact {
   phoneNumber      String?          @unique
   email            String?          @unique
   contactClusterId Int?
-  contactCluster   ContactCluster?  @relation("MemberContacts",fields: [contactClusterId], references: [id])
+  contactCluster   ContactCluster?  @relation("MemberContacts", fields: [contactClusterId], references: [id])
   linkPrecedence   LinkPrecedence
   createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
+  updatedAt        DateTime         @default(now()) @updatedAt
   clustersCreated  ContactCluster[] @relation("ClusterCreator")
 }
 
 model ContactCluster {
-  id          Int       @id @default(autoincrement())
-  members     Contact[] @relation("MemberContacts")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  creatorId   Int
-  creator     Contact   @relation("ClusterCreator", fields: [creatorId], references: [id])
+  id        Int       @id @default(autoincrement())
+  members   Contact[] @relation("MemberContacts")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  creatorId Int
+  creator   Contact   @relation("ClusterCreator", fields: [creatorId], references: [id])
 }
 
 enum LinkPrecedence {
