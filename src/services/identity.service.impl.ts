@@ -107,7 +107,6 @@ export class IdentityServiceImpl implements IdentityService {
                 });
 
                 return new Success(response);
-                // return new Exception("TODO: ERROR");
 
             } catch (e: Error | any) {
                 return new Exception(e?.message ?? "Unknown Error");
