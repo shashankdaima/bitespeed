@@ -8,9 +8,9 @@ datasource db {
 }
 
 model Contact {
-  id          Int     @id @default(autoincrement())
-  phoneNumber String?
-  email       String?
+  id               Int              @id @default(autoincrement())
+  phoneNumber      String?
+  email            String?
   contactClusterId Int?
   contactCluster   ContactCluster?  @relation("MemberContacts", fields: [contactClusterId], references: [id])
   createdAt        DateTime         @default(now())
@@ -18,6 +18,8 @@ model Contact {
   clustersCreated  ContactCluster[] @relation("ClusterCreator")
 
   @@unique([phoneNumber, email])
+  @@index([phoneNumber])
+  @@index([email])
 }
 
 model ContactCluster {
