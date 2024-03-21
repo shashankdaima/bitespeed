@@ -1,4 +1,4 @@
-import { Contact, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { IdentityResponse } from "../models/identity.post.response";
 import { Exception, Result, Success } from "../utils/result.util";
 import { IdentityService } from "./identity.service";
@@ -46,9 +46,9 @@ export class IdentityServiceImpl implements IdentityService {
                         contactCluster: true
                     }
                 });
-                console.log("possibleClusterMakers", possibleClusterMakers);
+
                 const clusterId = possibleClusterMakers?.contactCluster?.id ?? null;
-                console.log("clusterId", clusterId);
+
                 if (exactMatchFound === 0) {
                     await tx.contact.create({
                         data: {
@@ -57,7 +57,6 @@ export class IdentityServiceImpl implements IdentityService {
                             contactClusterId: clusterId
                         }
                     })
-                    console.log("created new contact");
 
                 }
                 const contactsWithOtherClusters = await tx.contact.findMany({
@@ -112,19 +111,16 @@ export class IdentityServiceImpl implements IdentityService {
                     }
                 })
                 for (const member of mainCluster?.members ?? []) {
-                    if (member.email) {
+                    if (member.email && !emails.includes(member.email)) {
                         emails.push(member.email);
                     }
-                    if (member.phoneNumber) {
+                    if (member.phoneNumber && !phoneNumbers.includes(member.phoneNumber)) {
                         phoneNumbers.push(member.phoneNumber);
                     }
-                    if (member.id !== mainCluster?.creatorId!) {
+                    if (member.id !== mainCluster?.creatorId! && !secondaryContactIds.includes(member.id)) {
                         secondaryContactIds.push(member.id);
                     }
                 }
-                console.log("emails", emails);
-                console.log("phoneNumbers", phoneNumbers);
-                console.log("secondaryContactIds", secondaryContactIds);
                 const response = ({
                     contact: {
                         primaryContactId: mainCluster?.creatorId!,
@@ -133,7 +129,7 @@ export class IdentityServiceImpl implements IdentityService {
                         secondaryContactIds: secondaryContactIds
                     }
                 });
-                console.log("response", response);
+
 
                 return new Success(response);
 
