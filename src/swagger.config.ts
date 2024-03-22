@@ -14,7 +14,7 @@ const options :swaggerJsDoc.Options={
                 description: "Development server"
             },
             {
-                url: "http://localhost:5000",
+                url: "https://bitespeed-fyyp.onrender.com/",
                 description: "Production server"
             },
         ]
