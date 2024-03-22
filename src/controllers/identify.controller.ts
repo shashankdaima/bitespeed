@@ -3,6 +3,7 @@ import { z } from "zod";
 import { IdentityService } from "../services/identity.service";
 import { IdentityServiceImpl } from "../services/identity.service.impl";
 import { Success } from "../utils/result.util";
+import prisma from "../utils/prisma.util";
 
 const userSchema = z.object({
     email: z.string().email().nullable(),
@@ -23,7 +24,8 @@ export const identifyUser: RequestHandler = async (req, res, next) => {
         const parsingResult = userSchema.safeParse(req.body);
         if (parsingResult.success) {
             const service: IdentityService = new IdentityServiceImpl();
-            const serviceResponse = await service.identifyUser(parsingResult.data.email, parsingResult.data.phoneNumber);
+
+            const serviceResponse = await service.identifyUser(prisma, parsingResult.data.email, parsingResult.data.phoneNumber);
             if (serviceResponse instanceof Success) {
                 res.json(serviceResponse.data);
             } else {
