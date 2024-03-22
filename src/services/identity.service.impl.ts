@@ -4,7 +4,7 @@ import { Exception, Result, Success } from "../utils/result.util";
 import { IdentityService } from "./identity.service";
 const prisma = new PrismaClient();
 export class IdentityServiceImpl implements IdentityService {
-    async identifyUser(email: string, phoneNumber: string): Promise<Result<IdentityResponse>> {
+    async identifyUser(email: string|null, phoneNumber: string|null): Promise<Result<IdentityResponse>> {
         return await prisma.$transaction(async (tx) => {
             try {
                 const previousRefs = await tx.contact.count({
