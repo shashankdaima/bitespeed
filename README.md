@@ -31,7 +31,7 @@ Bitespeed needs a web service with an endpoint `/identify` that receives HTTP PO
   }
   ```
 ### Tech-stack
-- Express.js (with Typescript)
+- Express.js (with Typescript and ZOD)
 - Swagger UI
 - Render for Deployment
 - Docker for Containerization
