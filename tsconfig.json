@@ -106,7 +106,7 @@
     "dist",
     "./coverage",
     "./dist",
-    "__tests__",
+    "test",
     "jest.config.js"
   ]
 }
